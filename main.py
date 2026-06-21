@@ -1,5 +1,6 @@
 from models.graph import Graph
 from models.node import Node
+from algos.astar import astar
 from algos.dijkstra import dijkstra
 from utils.metrics import measure_route_search
 
@@ -27,25 +28,25 @@ def build_city():
     graph.add_bidirectional_edge(
         "A",
         "B",
-        4
+        10
     )
 
     graph.add_bidirectional_edge(
         "A",
         "C",
-        2
+        10
     )
 
     graph.add_bidirectional_edge(
         "B",
         "D",
-        5
+        10
     )
 
     graph.add_bidirectional_edge(
         "C",
         "D",
-        8
+        10
     )
 
     return graph
@@ -60,8 +61,15 @@ def main():
     start = "A"
     goal = "D"
 
-    result = measure_route_search(
+    dijkstra_result = measure_route_search(
         dijkstra,
+        city_graph,
+        start,
+        goal
+    )
+
+    astar_result = measure_route_search(
+        astar,
         city_graph,
         start,
         goal
@@ -69,10 +77,17 @@ def main():
 
     print("\nDijkstra Result")
     print("-" * 50)
-    print(f"Route: {' -> '.join(result['path'])}")
-    print(f"Path cost: {result['cost']}")
-    print(f"Nodes explored: {result['nodes_explored']}")
-    print(f"Execution time: {result['execution_time_ms']:.4f} ms")
+    print(f"Route: {' -> '.join(dijkstra_result['path'])}")
+    print(f"Path cost: {dijkstra_result['cost']}")
+    print(f"Nodes explored: {dijkstra_result['nodes_explored']}")
+    print(f"Execution time: {dijkstra_result['execution_time_ms']:.4f} ms")
+
+    print("\nA* Result")
+    print("-" * 50)
+    print(f"Route: {' -> '.join(astar_result['path'])}")
+    print(f"Path cost: {astar_result['cost']}")
+    print(f"Nodes explored: {astar_result['nodes_explored']}")
+    print(f"Execution time: {astar_result['execution_time_ms']:.4f} ms")
 
 
 if __name__ == "__main__":
