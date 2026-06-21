@@ -1,5 +1,7 @@
 from models.graph import Graph
 from models.node import Node
+from algos.dijkstra import dijkstra
+from utils.metrics import measure_route_search
 
 
 def build_city():
@@ -54,6 +56,23 @@ def main():
     city_graph = build_city()
 
     city_graph.print_graph()
+
+    start = "A"
+    goal = "D"
+
+    result = measure_route_search(
+        dijkstra,
+        city_graph,
+        start,
+        goal
+    )
+
+    print("\nDijkstra Result")
+    print("-" * 50)
+    print(f"Route: {' -> '.join(result['path'])}")
+    print(f"Path cost: {result['cost']}")
+    print(f"Nodes explored: {result['nodes_explored']}")
+    print(f"Execution time: {result['execution_time_ms']:.4f} ms")
 
 
 if __name__ == "__main__":
