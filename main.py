@@ -28,25 +28,29 @@ def build_city():
     graph.add_bidirectional_edge(
         "A",
         "B",
-        10
+        10,
+        "ARTERIAL"
     )
 
     graph.add_bidirectional_edge(
         "A",
         "C",
-        10
+        10,
+        "LOCAL"
     )
 
     graph.add_bidirectional_edge(
         "B",
         "D",
-        10
+        10,
+        "HIGHWAY"
     )
 
     graph.add_bidirectional_edge(
         "C",
         "D",
-        10
+        10,
+        "LOCAL"
     )
 
     return graph
@@ -78,14 +82,14 @@ def main():
     print("\nDijkstra Result")
     print("-" * 50)
     print(f"Route: {' -> '.join(dijkstra_result['path'])}")
-    print(f"Path cost: {dijkstra_result['cost']}")
+    print(f"Travel time: {dijkstra_result['cost']:.2f} hr")
     print(f"Nodes explored: {dijkstra_result['nodes_explored']}")
     print(f"Execution time: {dijkstra_result['execution_time_ms']:.4f} ms")
 
     print("\nA* Result")
     print("-" * 50)
     print(f"Route: {' -> '.join(astar_result['path'])}")
-    print(f"Path cost: {astar_result['cost']}")
+    print(f"Travel time: {astar_result['cost']:.2f} hr")
     print(f"Nodes explored: {astar_result['nodes_explored']}")
     print(f"Execution time: {astar_result['execution_time_ms']:.4f} ms")
 

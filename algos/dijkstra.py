@@ -58,7 +58,7 @@ def dijkstra(graph, start_id, goal_id):
             if neighbor_id in visited:
                 continue
 
-            new_distance = current_distance + edge.distance
+            new_distance = current_distance + edge.cost
 
             if new_distance < distances[neighbor_id]:
                 distances[neighbor_id] = new_distance

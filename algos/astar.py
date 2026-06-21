@@ -1,12 +1,21 @@
 import heapq
 from math import sqrt
 
+from models.edge import ROAD_SPEEDS
+
+
+MAX_ROAD_SPEED = max(ROAD_SPEEDS.values())
+
 
 def euclidean_distance(node1, node2):
     return sqrt(
         (node1.x - node2.x) ** 2
         + (node1.y - node2.y) ** 2
     )
+
+
+def estimated_travel_time(node1, node2):
+    return euclidean_distance(node1, node2) / MAX_ROAD_SPEED
 
 
 def reconstruct_path(parents, start_id, goal_id):
@@ -52,7 +61,7 @@ def astar(graph, start_id, goal_id):
     costs[start_id] = 0
     heapq.heappush(
         priority_queue,
-        (euclidean_distance(start_node, goal_node), start_id)
+        (estimated_travel_time(start_node, goal_node), start_id)
     )
 
     while priority_queue:
@@ -72,7 +81,7 @@ def astar(graph, start_id, goal_id):
             if neighbor_id in visited:
                 continue
 
-            new_cost = costs[current_id] + edge.distance
+            new_cost = costs[current_id] + edge.cost
 
             if new_cost < costs[neighbor_id]:
                 neighbor_node = graph.get_node(neighbor_id)
@@ -81,7 +90,7 @@ def astar(graph, start_id, goal_id):
 
                 estimated_total_cost = (
                     new_cost
-                    + euclidean_distance(neighbor_node, goal_node)
+                    + estimated_travel_time(neighbor_node, goal_node)
                 )
                 heapq.heappush(
                     priority_queue,

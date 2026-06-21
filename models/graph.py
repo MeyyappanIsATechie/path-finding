@@ -18,7 +18,8 @@ class Graph:
         self,
         source: str,
         destination: str,
-        distance: float
+        distance: float,
+        road_type: str = "LOCAL"
     ):
 
         if source not in self.nodes:
@@ -30,7 +31,8 @@ class Graph:
         edge = Edge(
             source,
             destination,
-            distance
+            distance,
+            road_type
         )
 
         self.adjacency_list[source].append(edge)
@@ -39,19 +41,22 @@ class Graph:
         self,
         node1: str,
         node2: str,
-        distance: float
+        distance: float,
+        road_type: str = "LOCAL"
     ):
 
         self.add_edge(
             node1,
             node2,
-            distance
+            distance,
+            road_type
         )
 
         self.add_edge(
             node2,
             node1,
-            distance
+            distance,
+            road_type
         )
 
     def get_neighbors(self, node_id: str):
@@ -75,7 +80,9 @@ class Graph:
 
             for edge in edges:
                 neighbors.append(
-                    f"{edge.destination} ({edge.distance})"
+                    f"{edge.destination} "
+                    f"({edge.road_type}, "
+                    f"{edge.travel_time:.2f} hr)"
                 )
 
             print(", ".join(neighbors))
