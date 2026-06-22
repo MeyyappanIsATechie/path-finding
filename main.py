@@ -7,9 +7,13 @@ from utils.metrics import measure_route_search
 
 
 def build_city():
+    # Phase 1: Build a tiny city map.
+    # Each node is a place, and each edge is a road between two places.
 
     graph = Graph()
 
+    # The x and y numbers are simple map positions.
+    # A* uses these positions to guess which road is closer to the destination.
     graph.add_node(
         Node("A", 0, 0)
     )
@@ -26,6 +30,8 @@ def build_city():
         Node("D", 10, 10)
     )
 
+    # Phase 4: Roads now have types.
+    # The same distance can take different time depending on the road speed.
     graph.add_bidirectional_edge(
         "A",
         "B",
@@ -58,6 +64,8 @@ def build_city():
 
 
 def print_route_result(label, result):
+    # Print one algorithm's answer in a readable way.
+    # The result dictionary comes from Dijkstra or A*.
     print(f"\n{label}")
     print("-" * 50)
     print(f"Route: {' -> '.join(result['path'])}")
@@ -67,6 +75,8 @@ def print_route_result(label, result):
 
 
 def compare_algorithms(city_graph, start, goal, scenario):
+    # Phase 2 and Phase 3: Run both path-finding algorithms on the same map.
+    # This lets us compare route, travel time, explored nodes, and speed.
     dijkstra_result = measure_route_search(
         dijkstra,
         city_graph,
@@ -91,6 +101,7 @@ def main():
 
     city_graph = build_city()
 
+    # Show the city before any route search happens.
     city_graph.print_graph()
 
     start = "A"
@@ -103,6 +114,8 @@ def main():
         "Normal Traffic"
     )
 
+    # Phase 5: Change the road conditions after the graph is already built.
+    # An accident makes A-B much slower, so the best route should change.
     apply_bidirectional_traffic_condition(
         city_graph,
         "A",
