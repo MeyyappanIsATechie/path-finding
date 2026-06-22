@@ -63,6 +63,13 @@ class Graph:
 
         return self.adjacency_list[node_id]
 
+    def get_edge(self, source: str, destination: str):
+        for edge in self.get_neighbors(source):
+            if edge.destination == destination:
+                return edge
+
+        return None
+
     def get_node(self, node_id: str):
 
         return self.nodes.get(node_id)
@@ -82,7 +89,8 @@ class Graph:
                 neighbors.append(
                     f"{edge.destination} "
                     f"({edge.road_type}, "
-                    f"{edge.travel_time:.2f} hr)"
+                    f"{edge.traffic_status}, "
+                    f"{edge.cost:.2f} hr)"
                 )
 
             print(", ".join(neighbors))
