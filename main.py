@@ -1,9 +1,15 @@
+from pathlib import Path
+
 from models.graph import Graph
 from models.node import Node
 from algos.astar import astar
 from algos.dijkstra import dijkstra
 from sim.traffic import apply_bidirectional_traffic_condition
 from utils.metrics import measure_route_search
+from visualization.visualizer import visualize_route
+
+
+VISUALIZATION_OUTPUT_DIR = Path("visualization") / "output"
 
 
 def build_city():
@@ -74,7 +80,7 @@ def print_route_result(label, result):
     print(f"Execution time: {result['execution_time_ms']:.4f} ms")
 
 
-def compare_algorithms(city_graph, start, goal, scenario):
+def compare_algorithms(city_graph, start, goal, scenario, image_prefix=None):
     # Phase 2 and Phase 3: Run both path-finding algorithms on the same map.
     # This lets us compare route, travel time, explored nodes, and speed.
     dijkstra_result = measure_route_search(
@@ -96,6 +102,29 @@ def compare_algorithms(city_graph, start, goal, scenario):
     print_route_result("Dijkstra Result", dijkstra_result)
     print_route_result("A* Result", astar_result)
 
+    if image_prefix is not None:
+        VISUALIZATION_OUTPUT_DIR.mkdir(parents=True, exist_ok=True)
+
+        visualize_route(
+            city_graph,
+            dijkstra_result,
+            f"{scenario} - Dijkstra",
+            save_path=VISUALIZATION_OUTPUT_DIR / f"{image_prefix}_dijkstra.png",
+            show=False
+        )
+        visualize_route(
+            city_graph,
+            astar_result,
+            f"{scenario} - A*",
+            save_path=VISUALIZATION_OUTPUT_DIR / f"{image_prefix}_astar.png",
+            show=False
+        )
+
+    return {
+        "dijkstra": dijkstra_result,
+        "astar": astar_result
+    }
+
 
 def main():
 
@@ -111,7 +140,8 @@ def main():
         city_graph,
         start,
         goal,
-        "Normal Traffic"
+        "Normal Traffic",
+        "normal_traffic"
     )
 
     # Phase 5: Change the road conditions after the graph is already built.
@@ -129,7 +159,8 @@ def main():
         city_graph,
         start,
         goal,
-        "Accident on A-B"
+        "Accident on A-B",
+        "accident_ab"
     )
 
 
